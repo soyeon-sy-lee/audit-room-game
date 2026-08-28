@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState, type CSSProperties } from "react";
 type Question = { stage: string; kicker: string; prompt: string; choices: string[]; answer: number; explanation: string; basis: string; skill: "판단력" | "의구심" | "효율성" };
 type AuditCase = {
   id: string; number: string; company: string; code: string; year: string; field: string; category: string; basis: string; summary: string; risk: string; accent: string;
-  metrics: [string, string][]; questions: Question[]; reportDate: string; report: [string, string][]; note: string;
+  metrics: [string, string][]; terms: { term: string; meaning: string; why: string }[]; questions: Question[]; reportDate: string; report: [string, string][]; note: string;
   sources: { label: string; detail: string; url: string }[];
 };
 
@@ -14,6 +14,11 @@ const cases: AuditCase[] = [
     id: "samsung-sds-2023", number: "01", company: "삼성SDS", code: "018260", year: "2023", field: "IT 서비스 · 물류", category: "TECHNOLOGY", basis: "연결 재무제표",
     summary: "장기 SI 프로젝트의 원가 추정과 진행률을 끝까지 추적하세요.", risk: "ESTIMATION RISK", accent: "#d7ff37",
     metrics: [["매출", "13.28조"], ["영업이익", "8,082억"], ["총자산", "12.32조"], ["전년 매출", "17.23조"]],
+    terms: [
+      { term: "SI 프로젝트", meaning: "System Integration의 약자. 고객 업무에 맞춰 여러 정보시스템을 설계·개발·연결하는 장기 프로젝트입니다.", why: "완성까지 여러 달 또는 여러 해가 걸려, 실제로 얼마나 수행했는지에 따라 매출을 나눠 인식하는 경우가 많습니다." },
+      { term: "진행률", meaning: "전체 계약 업무 중 결산일까지 수행한 비율입니다. 흔히 실제 투입원가 ÷ 총예정원가로 계산합니다.", why: "총예정원가를 낮게 잡으면 진행률과 당기 매출·이익이 과대계상될 수 있어 감사위험이 큽니다." },
+      { term: "계약자산", meaning: "일은 수행했지만 청구조건이 아직 충족되지 않아 고객에게 바로 받을 수 없는 대가입니다.", why: "진행률 추정이 낙관적이면 계약자산도 함께 부풀려질 수 있습니다." },
+    ],
     questions: [
       { stage: "계획 단계", kicker: "FIRST MOVE", prompt: "SI 프로젝트 매출의 진행률을 검토하려 합니다. 가장 먼저 요청할 자료 묶음은?", choices: ["법인카드 명세와 임직원 경비 정산서", "프로젝트별 계약서, 총예정원가 산출 근거, 실제 원가 투입 내역", "유형자산 취득명세와 감가상각 스케줄"], answer: 1, explanation: "진행률은 누적발생원가와 총예정원가에 직접 좌우됩니다. 계약 조건, 총예정원가의 승인·변경 근거, 실제 투입원가를 연결해야 위험에 대응할 수 있습니다.", basis: "감사기준서 315 · 330 · 500", skill: "효율성" },
       { stage: "위험 평가", kicker: "FOLLOW THE RISK", prompt: "당기 프로젝트의 총예정원가가 반복해서 하향 조정되었습니다. 우선 집중할 재무제표 계정은?", choices: ["계약자산·매출·매출원가와 손실충당부채", "현금및현금성자산과 단기금융상품", "자본금과 주식발행초과금", "퇴직급여채무와 기타포괄손익"], answer: 0, explanation: "총예정원가 하향은 진행률과 당기 매출·이익을 높일 수 있습니다. 계약자산, 누적 매출·원가, 손실 프로젝트 충당 여부를 프로젝트 단위로 연결해 봐야 합니다.", basis: "감사기준서 240 · 315 · K-IFRS 1115", skill: "의구심" },
@@ -33,6 +38,11 @@ const cases: AuditCase[] = [
     id: "nexon-games-2023", number: "02", company: "넥슨게임즈", code: "225570", year: "2023", field: "게임 개발 · 서비스", category: "MEDIA", basis: "연결 재무제표",
     summary: "게임 현금창출단위의 영업권 321억원, 낙관적 전망을 의심하세요.", risk: "IMPAIRMENT RISK", accent: "#ff7657",
     metrics: [["총자산", "3,669억"], ["영업권", "321억"], ["게임 CGU 영업권", "256억"], ["종업원", "1,275명"]],
+    terms: [
+      { term: "영업권", meaning: "회사를 인수할 때 식별 가능한 순자산의 공정가치보다 더 지급한 금액입니다.", why: "매년 가치가 유지되는지 손상검사를 해야 하며, 미래 실적 전망에 경영진 판단이 많이 들어갑니다." },
+      { term: "CGU(현금창출단위)", meaning: "다른 자산과 비교적 독립적으로 현금을 벌어들이는 가장 작은 자산 묶음입니다.", why: "영업권 자체는 현금을 만들지 못하므로 관련 CGU에 배부해 손상 여부를 검사합니다." },
+      { term: "사용가치", meaning: "자산이나 CGU가 앞으로 벌 것으로 예상되는 현금을 현재가치로 환산한 금액입니다.", why: "성장률·이익률·할인율이 조금만 달라져도 평가액이 크게 바뀔 수 있습니다." },
+    ],
     questions: [
       { stage: "계획 단계", kicker: "MAP THE CGU", prompt: "영업권 손상검사 감사에서 가장 먼저 받아야 할 자료는?", choices: ["현금창출단위별 장부금액 배부표와 이사회 승인 사업계획", "전체 임직원 급여대장", "법인인감 사용대장"], answer: 0, explanation: "영업권이 어느 현금창출단위에 배부되었는지 확정한 뒤, 장부금액과 회수가능액을 같은 단위로 비교해야 합니다.", basis: "감사기준서 315 · 500 · K-IFRS 1036", skill: "효율성" },
       { stage: "추정 검토", kicker: "CHALLENGE THE MODEL", prompt: "사용가치 모형에서 감사인이 가장 강하게 반증해야 할 가정 조합은?", choices: ["매출 성장률·영업이익률·할인율·영구성장률", "자본금·주당 액면가·발행주식수", "법인 주소·전화번호·홈페이지", "급여 지급일·복리후생비 계정명"], answer: 0, explanation: "회수가능액은 작은 가정 변화에도 크게 움직일 수 있습니다. 외부 시장자료, 과거 예측 정확도와 민감도 분석으로 경영진 가정을 반증합니다.", basis: "감사기준서 540", skill: "의구심" },
@@ -48,6 +58,11 @@ const cases: AuditCase[] = [
     id: "hybe-2023", number: "03", company: "하이브", code: "352820", year: "2023", field: "음악 · 플랫폼 · 공연", category: "MEDIA", basis: "별도 재무제표",
     summary: "멀티레이블 구조에서 종속기업투자의 손상 징후를 찾아내세요.", risk: "VALUATION RISK", accent: "#b7a7ff",
     metrics: [["자산", "3.69조"], ["매출", "1.37조"], ["당기순이익", "614억원"], ["종업원", "771명"]],
+    terms: [
+      { term: "종속기업투자", meaning: "지배회사가 지배력을 가진 자회사에 투자한 금액을 별도재무제표에 표시한 계정입니다.", why: "자회사의 사업가치가 떨어지면 투자 장부금액을 회수하지 못할 수 있어 손상검토가 필요합니다." },
+      { term: "손상징후", meaning: "반복 손실, 예산 미달, 시장가치 하락처럼 자산 가치가 떨어졌을 가능성을 보여주는 신호입니다.", why: "징후가 있으면 장부금액과 회수가능액을 비교하는 본격적인 손상검사를 수행합니다." },
+      { term: "멀티레이블", meaning: "여러 음악 레이블이 각자 아티스트와 콘텐츠를 운영하는 사업 구조입니다.", why: "레이블별 성과와 전망이 달라 법인별 사업계획과 투자 가치를 따로 검토해야 합니다." },
+    ],
     questions: [
       { stage: "계획 단계", kicker: "UNDERSTAND THE GROUP", prompt: "종속기업투자 손상 위험을 파악하기 위한 첫 자료 묶음은?", choices: ["법인별 실적·사업계획, 투자 장부금액, 손상징후 검토표", "본사 소모품 구매명세", "주주명부와 배당금 지급내역"], answer: 0, explanation: "별도재무제표의 종속기업투자는 법인별 장부금액과 회수가능액을 비교해야 하므로 그룹 구조와 각 법인의 실적을 먼저 연결해야 합니다.", basis: "감사기준서 315 · 500", skill: "효율성" },
       { stage: "위험 평가", kicker: "FIND THE TRIGGER", prompt: "손상 징후로 가장 강한 조합은?", choices: ["피투자회사의 반복 손실·예산 미달·시장가치 하락", "본사 직원 수 증가·사무실 이전", "주가 상승·현금배당 실시", "감가상각비의 정기 인식"], answer: 0, explanation: "반복 손실과 계획 미달, 외부가치 하락은 회수가능액이 장부금액보다 낮을 수 있음을 나타내는 대표적 손상 징후입니다.", basis: "K-IFRS 1036 · 감사기준서 540", skill: "의구심" },
@@ -63,6 +78,11 @@ const cases: AuditCase[] = [
     id: "kakao-2023", number: "04", company: "카카오", code: "035720", year: "2023", field: "플랫폼 · 콘텐츠 · 금융", category: "TECHNOLOGY", basis: "연결·별도 재무제표",
     summary: "에스엠 인수의 식별가능자산과 영업권, 손상평가를 연결하세요.", risk: "ACQUISITION RISK", accent: "#ffe13b",
     metrics: [["총자산", "25.18조"], ["현금성자산", "5.27조"], ["무형자산", "5.69조"], ["회계연도", "제29기"]],
+    terms: [
+      { term: "사업결합", meaning: "한 회사가 다른 사업의 지배력을 취득하는 거래입니다. 일반적인 주식투자보다 복잡한 취득 회계가 적용됩니다.", why: "취득일, 지급대가, 인수한 자산·부채의 공정가치를 모두 판단해야 합니다." },
+      { term: "PPA(인수가격배분)", meaning: "인수대금을 취득한 식별가능 자산·부채와 영업권에 나누어 배분하는 가치평가 절차입니다.", why: "배분 결과에 따라 이후 감가상각·상각과 손상검사, 당기손익이 달라집니다." },
+      { term: "식별가능 무형자산", meaning: "브랜드, 고객관계, 계약권리처럼 물리적 형태는 없지만 따로 구분해 가치를 측정할 수 있는 자산입니다.", why: "가치와 내용연수에 복잡한 추정이 필요해 전문가의 검토가 자주 사용됩니다." },
+    ],
     questions: [
       { stage: "계획 단계", kicker: "READ THE DEAL", prompt: "에스엠 사업결합 회계처리를 감사할 때 가장 먼저 요청할 자료는?", choices: ["주식매매계약, 취득일 판단 문서, 인수가격배분(PPA) 보고서", "전사 법인카드 사용내역", "본사 건물 감가상각표"], answer: 0, explanation: "취득일·이전대가·식별가능자산과 부채의 공정가치가 사업결합 회계처리의 출발점입니다.", basis: "K-IFRS 1103 · 감사기준서 500", skill: "효율성" },
       { stage: "가치평가", kicker: "CHALLENGE FAIR VALUE", prompt: "PPA에서 전문가 투입을 우선 고려할 영역은?", choices: ["아티스트 관련 무형자산·고객관계의 공정가치와 내용연수", "보통예금 잔액", "자본금 액면가", "단기 미지급 급여"], answer: 0, explanation: "콘텐츠 기업의 식별가능 무형자산은 복잡한 가치평가 모형과 가정을 사용하므로 감사인의 가치평가 전문가 활용을 고려할 수 있습니다.", basis: "감사기준서 540 · 620", skill: "판단력" },
@@ -78,6 +98,11 @@ const cases: AuditCase[] = [
     id: "lg-electronics-2023", number: "05", company: "LG전자", code: "066570", year: "2023", field: "전자 · 플랫폼 · 전장", category: "TECHNOLOGY", basis: "연결 재무제표",
     summary: "147개 종속회사와 84조원 매출, 그룹감사의 범위를 설계하세요.", risk: "GROUP AUDIT RISK", accent: "#79d9ff",
     metrics: [["매출", "84.23조"], ["영업이익", "3.55조"], ["총자산", "60.24조"], ["종속회사", "147개"]],
+    terms: [
+      { term: "그룹감사", meaning: "지배회사와 여러 종속회사를 합친 연결재무제표에 대해 수행하는 감사입니다.", why: "그룹감사인은 해외·국내 구성요소 감사인의 업무까지 지시하고 검토해 전체 의견을 책임집니다." },
+      { term: "구성요소", meaning: "그룹 안에서 별도의 재무정보를 작성하는 회사, 사업부 또는 지역 단위입니다.", why: "규모가 크거나 특정 위험이 높은 구성요소를 골라 충분한 감사범위를 확보해야 합니다." },
+      { term: "연결조정", meaning: "그룹 내부거래와 채권·채무, 미실현손익 등을 제거해 그룹을 하나의 회사처럼 표시하는 조정입니다.", why: "종속회사가 많을수록 제거 누락이나 환산 오류가 연결재무제표 전체를 왜곡할 수 있습니다." },
+    ],
     questions: [
       { stage: "그룹 계획", kicker: "SCOPING FIRST", prompt: "147개 종속회사가 있는 그룹감사의 첫 핵심 판단은?", choices: ["구성요소별 재무적 유의성·특정위험을 평가해 감사범위를 정한다", "모든 법인에 동일한 한 페이지 질문서를 보낸다", "지배회사 숫자만 감사한다"], answer: 0, explanation: "그룹 구조, 구성요소의 규모와 특정위험을 바탕으로 전체 재무제표에 충분한 범위를 확보해야 합니다.", basis: "감사기준서 600", skill: "효율성" },
       { stage: "위험 평가", kicker: "FOLLOW THE BUSINESS", prompt: "가전·TV·전장 사업에서 서로 다른 위험을 가장 잘 반영한 감사계획은?", choices: ["사업본부별 매출조건, 재고 노후화, 품질보증충당부채를 따로 평가", "모든 사업본부에 현금만 집중", "연결조정은 감사하지 않음"], answer: 0, explanation: "제품과 계약조건이 다른 사업은 수익인식, 재고평가, 보증의무 위험도 다르므로 사업본부별 대응이 필요합니다.", basis: "감사기준서 315 · 330", skill: "판단력" },
@@ -173,7 +198,12 @@ export default function Home() {
           {screen === "case" ? (
             <section className="workspace" aria-live="polite">
               <aside className="case-file"><p className="section-label">CLIENT BRIEF</p><div className="client-title"><span>{activeCase.code}</span><h2>{activeCase.company}</h2></div><p>{activeCase.field}<br />{activeCase.basis}</p><dl>{activeCase.metrics.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl><div className="risk-chip">{activeCase.risk} <b>HIGH</b></div><p className="data-note">단위 반올림 · {activeCase.year} 기준</p></aside>
-              <article className="question-card"><div className="question-meta"><span>{String(current + 1).padStart(2, "0")} / {String(activeCase.questions.length).padStart(2, "0")}</span><span>{question.stage}</span></div><div className="progress-line"><i style={{ width: `${((current + (submitted ? 1 : 0)) / activeCase.questions.length) * 100}%` }} /></div><p className="section-label">{question.kicker}</p><h2>{question.prompt}</h2>
+              <article className="question-card">
+                <details className="term-brief" defaultOpen key={activeCase.id}>
+                  <summary><span>먼저 읽는 산업·감사용어</span><b>{activeCase.terms.length}개 용어 <i>＋</i></b></summary>
+                  <div className="term-grid">{activeCase.terms.map((item) => <div key={item.term}><strong>{item.term}</strong><p>{item.meaning}</p><small><b>왜 중요할까?</b> {item.why}</small></div>)}</div>
+                </details>
+                <div className="question-meta"><span>{String(current + 1).padStart(2, "0")} / {String(activeCase.questions.length).padStart(2, "0")}</span><span>{question.stage}</span></div><div className="progress-line"><i style={{ width: `${((current + (submitted ? 1 : 0)) / activeCase.questions.length) * 100}%` }} /></div><p className="section-label">{question.kicker}</p><h2>{question.prompt}</h2>
                 <div className="choices">{displayedChoices.map(({ choice, originalIndex }, displayIndex) => <button key={choice} className={choiceState(originalIndex)} onClick={() => !submitted && setSelected(originalIndex)} disabled={submitted} aria-pressed={selected === originalIndex}><b>{String.fromCharCode(65 + displayIndex)}</b><span>{choice}</span><i aria-hidden="true">{submitted && originalIndex === question.answer ? "✓" : selected === originalIndex ? "●" : ""}</i></button>)}</div>
                 {submitted && <div className={`feedback ${selected === question.answer ? "is-correct" : "is-wrong"}`}><div><b>{selected === question.answer ? `+${points} · 좋은 판단입니다` : "+0 · 감사증거를 다시 연결해 보세요"}</b><span>{question.basis}</span></div><p>{question.explanation}</p></div>}
                 <button className="primary" onClick={advance} disabled={selected === null}>{submitted ? (current === activeCase.questions.length - 1 ? "감사보고서 발행" : "다음 감사 절차") : "판단 확정"}<span>→</span></button>
