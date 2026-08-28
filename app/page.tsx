@@ -117,13 +117,12 @@ const cases: AuditCase[] = [
 ];
 
 const ranks = [
-  { min: 0, title: "New Staff", year: "1년차" },
-  { min: 150, title: "Associate", year: "2년차" },
-  { min: 350, title: "Senior Associate", year: "3년차+" },
-  { min: 700, title: "Manager", year: "5년차+" },
-  { min: 1200, title: "Senior Manager", year: "8년차+" },
-  { min: 1900, title: "Director", year: "경력 리더" },
-  { min: 2800, title: "Partner", year: "최고 리더" },
+  { min: 0, title: "Associate" },
+  { min: 250, title: "Senior Associate" },
+  { min: 650, title: "Manager" },
+  { min: 1150, title: "Senior Manager" },
+  { min: 1850, title: "Director" },
+  { min: 2800, title: "Partner" },
 ];
 
 function rankFor(xp: number) { return [...ranks].reverse().find((rank) => xp >= rank.min) ?? ranks[0]; }
@@ -185,7 +184,7 @@ export default function Home() {
       <header className="topbar">
         <button className="brand" onClick={openDesk} aria-label="케이스 데스크로"><span>／A</span> AUDIT ROOM</button>
         <nav aria-label="주요 메뉴"><button className="nav-active" onClick={openDesk}>Case desk</button><button onClick={() => document.querySelector(".career-strip")?.scrollIntoView({ behavior: "smooth" })}>Career</button><button onClick={() => setSourcesOpen(true)}>Source notes</button><button onClick={() => setNoticeOpen(true)}>이용안내</button></nav>
-        <div className="profile"><div><small>{rank.title.toUpperCase()} · {rank.year}</small><strong>{xp.toLocaleString()} XP</strong></div><div className="avatar">A</div></div>
+        <div className="profile"><div><small>{rank.title.toUpperCase()}</small><strong>{xp.toLocaleString()} XP</strong></div><div className="avatar">A</div></div>
       </header>
       <div className="notice-strip"><b>실제 공시 사실</b><span>＋</span><b>교육용 가상 감사상황</b><p>문제의 상황·선택지는 학습을 위해 재구성되었으며 해당 기업에서 실제 발생한 사실을 뜻하지 않습니다.</p><button onClick={() => setNoticeOpen(true)}>전체 안내 보기</button></div>
 
@@ -219,7 +218,7 @@ export default function Home() {
                 {submitted && <div className={`feedback ${selected === question.answer ? "is-correct" : "is-wrong"}`}><div><b>{selected === question.answer ? `+${points} · 좋은 판단입니다` : "+0 · 감사증거를 다시 연결해 보세요"}</b><span>{question.basis}</span></div><p>{question.explanation}</p></div>}
                 <button className="primary" onClick={advance} disabled={selected === null}>{submitted ? (current === activeCase.questions.length - 1 ? "감사보고서 발행" : "다음 감사 절차") : "판단 확정"}<span>→</span></button>
               </article>
-              <aside className="progress-card"><p className="section-label">YOUR TRACK</p><div className="rank-ring" style={{ background: `conic-gradient(var(--case-accent) ${nextProgress}%, transparent 0)` }}><div><span>{rank.year}</span><strong>{Math.round(nextProgress)}%</strong></div></div><h3>{nextRank ? `${nextRank.title}까지` : "최고 직급"}<br />{nextRank ? `${nextRank.min - xp} XP` : "도달"}</h3><div className="mini-stats">{Object.entries(stats).map(([label, value]) => <span key={label}>{label} <b>{value}</b></span>)}</div><div className="live-score"><span>CASE SCORE</span><b>{roundedScore}<small>/100</small></b></div></aside>
+              <aside className="progress-card"><p className="section-label">YOUR TRACK</p><div className="rank-ring" style={{ background: `conic-gradient(var(--case-accent) ${nextProgress}%, transparent 0)` }}><div><span>CURRENT GRADE</span><strong>{Math.round(nextProgress)}%</strong></div></div><h3>{nextRank ? `${nextRank.title}까지` : "최고 직급"}<br />{nextRank ? `${nextRank.min - xp} XP` : "도달"}</h3><div className="mini-stats">{Object.entries(stats).map(([label, value]) => <span key={label}>{label} <b>{value}</b></span>)}</div><div className="live-score"><span>CASE SCORE</span><b>{roundedScore}<small>/100</small></b></div></aside>
             </section>
           ) : (
             <section className="result-board" aria-live="polite"><div className="result-score"><p className="section-label">ENGAGEMENT COMPLETE</p><strong>{roundedScore}</strong><span>/ 100</span><h2>{roundedScore >= 80 ? "공시 결과와 정확히 맞췄습니다." : roundedScore >= 60 ? "의견은 맞았고, 절차는 더 날카롭게." : "중요한 단서를 놓쳤습니다."}</h2><p>이번 사건에서 <b>+{earnedXp} XP</b>를 획득했습니다. 점수는 공시 결과와의 일치도를 단순화한 교육 지표이며 유일하게 가능한 감사판단을 뜻하지 않습니다.</p><button className="primary result-button" onClick={openDesk}>다른 기업 감사하기 <span>→</span></button><button className="text-button replay" onClick={() => startCase(activeCase.id)}>이 사건 다시 감사하기 ↻</button></div><div className="report-match"><div className="actual-disclosure">공시에서 확인한 실제 사실</div><div className="match-head"><span>ACTUAL REPORT · {activeCase.reportDate}</span><b>MATCH SHEET</b></div><h3>실제 감사보고서와 대조</h3><ul>{activeCase.report.map(([label, value]) => <li key={label}><span>{label}</span><b>{value}</b><i>✓</i></li>)}</ul><p className="report-note">{activeCase.note}</p><button className="text-button" onClick={() => setSourcesOpen(true)}>공시 원문과 근거 보기 ↗</button></div></section>
@@ -227,7 +226,7 @@ export default function Home() {
         </>
       )}
 
-      <section className="career-strip"><p className="section-label">CAREER LADDER</p><div className="career-list">{ranks.map((item, index) => <div key={item.title} className={xp >= item.min ? "passed" : ""}><span>{String(index + 1).padStart(2, "0")}</span><b>{item.title}</b><small>{item.year} · {item.min.toLocaleString()} XP</small></div>)}</div><p className="career-note">직급 명칭은 공개된 삼일PwC 자료를 참고했으며, 표시 연차와 XP 기준은 게임 진행을 위해 단순화한 설정입니다. 실제 승진 시점과 요건은 개인·부문·평가에 따라 달라질 수 있습니다.</p></section>
+      <section className="career-strip"><p className="section-label">CAREER LADDER</p><div className="career-list">{ranks.map((item, index) => <div key={item.title} className={xp >= item.min ? "passed" : ""}><span>{String(index + 1).padStart(2, "0")}</span><b>{item.title}</b><small>{item.min.toLocaleString()} XP</small></div>)}</div><p className="career-note">직급 순서는 삼일PwC 공개 자료에서 확인되는 명칭을 따릅니다. XP 승진 기준은 게임 진행을 위한 설정이며 실제 승진 요건과 무관합니다.</p></section>
       <footer><span>INDEPENDENT EDUCATIONAL PROJECT</span><span>금융감독원·삼일회계법인·사례 기업과 무관한 독립 교육 프로젝트입니다.</span><div><button onClick={() => setSourcesOpen(true)}>출처와 방법론</button><button onClick={() => setNoticeOpen(true)}>이용안내</button></div></footer>
       {sourcesOpen && <div className="modal-backdrop" role="presentation" onMouseDown={() => setSourcesOpen(false)}><section className="source-modal" role="dialog" aria-modal="true" aria-labelledby="source-title" onMouseDown={(event) => event.stopPropagation()}><button className="modal-close" onClick={() => setSourcesOpen(false)} aria-label="닫기">×</button><p className="section-label">SOURCE NOTES · CASE {activeCase.number}</p><h2 id="source-title">{activeCase.company}의 공개 공시와 교육용 재구성</h2><p><b>실제 사실:</b> 표시된 수치, 감사의견, 핵심감사사항 및 보고일은 공개된 {activeCase.year}년 사업보고서·감사보고서를 요약했습니다.</p><p><b>가상 부분:</b> 문제의 구체적 상황, 요청자료, 감사절차와 선택지는 교육 목적으로 재구성했으며 해당 기업에서 실제 발생한 사실을 뜻하지 않습니다.</p><div className="source-links">{activeCase.sources.map((source, index) => <a href={source.url} target="_blank" rel="noreferrer" key={source.url}><span>{String(index + 1).padStart(2, "0")}</span><b>{source.label}</b><small>{source.detail} ↗</small></a>)}</div><div className="api-note"><b>DART API 연결 원칙</b><p>API 키는 서버 비밀값으로만 저장하고 브라우저·코드·로그에 노출하지 않습니다. 원문을 대량 복제하지 않고 필요한 사실을 요약하며 출처를 함께 표시합니다.</p></div></section></div>}
       {noticeOpen && <div className="modal-backdrop notice-backdrop" role="presentation" onMouseDown={closeNotice}><section className="source-modal legal-modal" role="dialog" aria-modal="true" aria-labelledby="notice-title" onMouseDown={(event) => event.stopPropagation()}><button className="modal-close" onClick={closeNotice} aria-label="닫기">×</button><p className="section-label">BEFORE YOU PLAY</p><h2 id="notice-title">이용 전 꼭 알아두세요.</h2><div className="legal-intro">공개 공시를 감사교육용 게임으로 바꾼 독립 프로젝트입니다. 실제 사실과 가상 상황을 아래 기준으로 구분합니다.</div><div className="legal-list">

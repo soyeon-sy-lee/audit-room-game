@@ -151,7 +151,7 @@ dd { margin:0;font-weight:800; }
 .report-note { margin:22px 0;color:var(--muted);font-size:12px;line-height:1.6; }
 .text-button { padding:0;border:0;border-bottom:1px solid var(--ink);background:none;font-size:12px;font-weight:800;cursor:pointer; }
 .career-strip { padding:58px 0 54px;border-bottom:1px solid var(--ink); }
-.career-list { display:grid;grid-template-columns:repeat(7,1fr);margin-top:22px;border:1px solid var(--line); }
+.career-list { display:grid;grid-template-columns:repeat(6,1fr);margin-top:22px;border:1px solid var(--line); }
 .career-list div { min-height:110px;padding:18px;border-right:1px solid var(--line);color:#9ca09c; }
 .career-list div:last-child { border:0; }
 .career-list div.passed { background:var(--ink);color:white; }
