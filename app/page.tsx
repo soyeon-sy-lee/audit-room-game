@@ -186,7 +186,7 @@ export default function Home() {
 
       {screen === "desk" ? (
         <>
-          <section className="desk-head"><div><p className="eyebrow">TMT AUDIT · CASE DESK</p><h1>다음 감사는<br /><em>어느 회사입니까?</em></h1><p className="lead">2023년 이후 삼일회계법인 감사 고객의 공개 공시를 바탕으로 만든 5개 교육용 사건입니다. 실제 수치·보고 결과와 가상 감사상황을 구분해 제공합니다.</p></div><div className="desk-count"><strong>{cases.length}</strong><span>PLAYABLE<br />ENGAGEMENTS</span></div></section>
+          <section className="desk-head"><div><p className="eyebrow">TMT AUDIT · CASE DESK</p><h1>다음 감사는<br /><em>어느 회사입니까?</em></h1><p className="lead">실제 기업의 공개 공시를 읽고 감사위험을 찾는 5개 교육용 사건입니다. 숫자 뒤의 사업을 이해하고, 필요한 증거를 선택해 최종 보고까지 완성하세요.</p></div><div className="desk-count"><strong>{cases.length}</strong><span>PLAYABLE<br />ENGAGEMENTS</span></div></section>
           <section className="case-grid">{cases.map((item) => (
             <button className="case-tile" key={item.id} onClick={() => startCase(item.id)} style={{ "--tile-accent": item.accent } as CSSProperties}>
               <div className="tile-top"><span>CASE {item.number}</span><i>{completedIds.includes(item.id) ? "완료 ✓" : "OPEN →"}</i></div>
@@ -195,6 +195,7 @@ export default function Home() {
             </button>
           ))}</section>
           <section className="desk-method"><p className="section-label">HOW IT WORKS</p><div><span>01</span><b>공시 단서 읽기</b><p>사업 구조와 숫자에서 위험 신호를 찾습니다.</p></div><div><span>02</span><b>감사 절차 선택</b><p>2–5개의 객관식 선택지 중 판단을 확정합니다.</p></div><div><span>03</span><b>실제 보고서 대조</b><p>의견·KAM·계속기업 결론을 실제 공시와 비교합니다.</p></div></section>
+          <section className="selection-note"><span>CASE SELECTION</span><p>사례는 2023년 이후 공개 공시에서 삼일회계법인이 감사인으로 확인된 TMT 기업을 기준으로 선정했습니다. 이는 선정 조건에 관한 사실 설명일 뿐이며, 본 서비스는 삼일회계법인이 제작·승인·후원한 자료가 아닙니다.</p><button onClick={() => setNoticeOpen(true)}>선정 기준과 비제휴 안내</button></section>
         </>
       ) : (
         <>
