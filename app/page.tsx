@@ -117,8 +117,13 @@ const cases: AuditCase[] = [
 ];
 
 const ranks = [
-  { min: 0, title: "New Staff", year: "1년차" }, { min: 200, title: "Associate", year: "2년차" }, { min: 500, title: "Senior Associate", year: "3년차" },
-  { min: 900, title: "Senior", year: "4년차" }, { min: 1500, title: "Manager", year: "6년차" }, { min: 2400, title: "Senior Manager", year: "8년차+" },
+  { min: 0, title: "New Staff", year: "1년차" },
+  { min: 150, title: "Associate", year: "2년차" },
+  { min: 350, title: "Senior Associate", year: "3년차+" },
+  { min: 700, title: "Manager", year: "5년차+" },
+  { min: 1200, title: "Senior Manager", year: "8년차+" },
+  { min: 1900, title: "Director", year: "경력 리더" },
+  { min: 2800, title: "Partner", year: "최고 리더" },
 ];
 
 function rankFor(xp: number) { return [...ranks].reverse().find((rank) => xp >= rank.min) ?? ranks[0]; }
@@ -222,7 +227,7 @@ export default function Home() {
         </>
       )}
 
-      <section className="career-strip"><p className="section-label">CAREER LADDER</p><div className="career-list">{ranks.map((item, index) => <div key={item.title} className={xp >= item.min ? "passed" : ""}><span>{String(index + 1).padStart(2, "0")}</span><b>{item.title}</b><small>{item.year} · {item.min.toLocaleString()} XP</small></div>)}</div></section>
+      <section className="career-strip"><p className="section-label">CAREER LADDER</p><div className="career-list">{ranks.map((item, index) => <div key={item.title} className={xp >= item.min ? "passed" : ""}><span>{String(index + 1).padStart(2, "0")}</span><b>{item.title}</b><small>{item.year} · {item.min.toLocaleString()} XP</small></div>)}</div><p className="career-note">직급 명칭은 공개된 삼일PwC 자료를 참고했으며, 표시 연차와 XP 기준은 게임 진행을 위해 단순화한 설정입니다. 실제 승진 시점과 요건은 개인·부문·평가에 따라 달라질 수 있습니다.</p></section>
       <footer><span>INDEPENDENT EDUCATIONAL PROJECT</span><span>금융감독원·삼일회계법인·사례 기업과 무관한 독립 교육 프로젝트입니다.</span><div><button onClick={() => setSourcesOpen(true)}>출처와 방법론</button><button onClick={() => setNoticeOpen(true)}>이용안내</button></div></footer>
       {sourcesOpen && <div className="modal-backdrop" role="presentation" onMouseDown={() => setSourcesOpen(false)}><section className="source-modal" role="dialog" aria-modal="true" aria-labelledby="source-title" onMouseDown={(event) => event.stopPropagation()}><button className="modal-close" onClick={() => setSourcesOpen(false)} aria-label="닫기">×</button><p className="section-label">SOURCE NOTES · CASE {activeCase.number}</p><h2 id="source-title">{activeCase.company}의 공개 공시와 교육용 재구성</h2><p><b>실제 사실:</b> 표시된 수치, 감사의견, 핵심감사사항 및 보고일은 공개된 {activeCase.year}년 사업보고서·감사보고서를 요약했습니다.</p><p><b>가상 부분:</b> 문제의 구체적 상황, 요청자료, 감사절차와 선택지는 교육 목적으로 재구성했으며 해당 기업에서 실제 발생한 사실을 뜻하지 않습니다.</p><div className="source-links">{activeCase.sources.map((source, index) => <a href={source.url} target="_blank" rel="noreferrer" key={source.url}><span>{String(index + 1).padStart(2, "0")}</span><b>{source.label}</b><small>{source.detail} ↗</small></a>)}</div><div className="api-note"><b>DART API 연결 원칙</b><p>API 키는 서버 비밀값으로만 저장하고 브라우저·코드·로그에 노출하지 않습니다. 원문을 대량 복제하지 않고 필요한 사실을 요약하며 출처를 함께 표시합니다.</p></div></section></div>}
       {noticeOpen && <div className="modal-backdrop notice-backdrop" role="presentation" onMouseDown={closeNotice}><section className="source-modal legal-modal" role="dialog" aria-modal="true" aria-labelledby="notice-title" onMouseDown={(event) => event.stopPropagation()}><button className="modal-close" onClick={closeNotice} aria-label="닫기">×</button><p className="section-label">BEFORE YOU PLAY</p><h2 id="notice-title">이용 전 꼭 알아두세요.</h2><div className="legal-intro">공개 공시를 감사교육용 게임으로 바꾼 독립 프로젝트입니다. 실제 사실과 가상 상황을 아래 기준으로 구분합니다.</div><div className="legal-list">

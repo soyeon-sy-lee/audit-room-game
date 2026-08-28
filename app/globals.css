@@ -151,13 +151,14 @@ dd { margin:0;font-weight:800; }
 .report-note { margin:22px 0;color:var(--muted);font-size:12px;line-height:1.6; }
 .text-button { padding:0;border:0;border-bottom:1px solid var(--ink);background:none;font-size:12px;font-weight:800;cursor:pointer; }
 .career-strip { padding:58px 0 54px;border-bottom:1px solid var(--ink); }
-.career-list { display:grid;grid-template-columns:repeat(6,1fr);margin-top:22px;border:1px solid var(--line); }
+.career-list { display:grid;grid-template-columns:repeat(7,1fr);margin-top:22px;border:1px solid var(--line); }
 .career-list div { min-height:110px;padding:18px;border-right:1px solid var(--line);color:#9ca09c; }
 .career-list div:last-child { border:0; }
 .career-list div.passed { background:var(--ink);color:white; }
 .career-list span,.career-list small { display:block;font:700 9px var(--font-geist-mono),monospace; }
 .career-list b { display:block;margin:22px 0 5px;font-size:13px; }
 .career-list .passed span { color:var(--acid); }
+.career-note { max-width:880px;margin:16px 0 0;color:var(--muted);font-size:10px;line-height:1.6; }
 footer { min-height:68px;display:flex;justify-content:space-between;gap:20px;align-items:center;font:700 9px var(--font-geist-mono),monospace;letter-spacing:.1em;color:var(--muted); }
 footer button { border:0;background:none;padding:0;font:inherit;color:var(--ink);cursor:pointer; }
 footer>div { display:flex;gap:18px; }
