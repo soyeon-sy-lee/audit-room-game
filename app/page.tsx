@@ -118,7 +118,7 @@ const realCases: AuditCase[] = [
 
 const fictionalCases: AuditCase[] = [
   {
-    id: "loop-market-sim", number: "06", company: "루프마켓", code: "SIM-PLT-01", year: "2025", field: "커머스 플랫폼 · 자체배송", category: "PLATFORM", basis: "완전한 가상 연결 재무제표", fictional: true,
+    id: "fictional-a", number: "06", company: "커머스 플랫폼 A사", code: "FICTIONAL-A", year: "2025", field: "커머스 플랫폼 · 자체배송", category: "PLATFORM", basis: "완전한 가상 연결 재무제표", fictional: true,
     summary: "중개와 자체배송이 섞인 플랫폼에서 총액·순액과 정산 차이를 풀어내세요.", risk: "REVENUE FLOW RISK", accent: "#ff8f66",
     metrics: [["총거래액", "2.40조"], ["회계상 매출", "3,180억"], ["연간 주문", "2.4억건"], ["기말 미정산", "210억"]],
     terms: [
@@ -134,11 +134,11 @@ const fictionalCases: AuditCase[] = [
       { stage: "보고 판단", kicker: "SIGN THE REPORT", prompt: "회사가 총액·순액 오류와 미정산채무를 모두 수정했고 충분한 증거를 확보했습니다. 모범 보고결론은?", choices: ["적정의견 · 플랫폼 매출 및 정산을 핵심감사사항으로 설명", "한정의견 · 수정된 오류도 반드시 의견변형", "의견거절 · 거래량이 많다는 사실만으로 감사불가"], answer: 0, explanation: "발견된 왜곡이 적절히 수정되고 충분하고 적합한 증거를 확보했다면 적정의견이 가능합니다. 거래량 자체가 의견변형 사유는 아닙니다.", basis: "감사기준서 700 · 701", skill: "판단력" },
     ],
     reportDate: "교육용 결산", report: [["모범 감사의견", "적정의견"], ["핵심감사사항", "플랫폼 매출의 총액·순액 및 판매자 정산"], ["중점 주장", "매출 발생·기간귀속 · 정산채무 완전성"], ["왜곡표시", "경영진이 전액 수정"], ["계속기업 중요 불확실성", "해당 없음"]],
-    note: "루프마켓과 모든 수치·상황·보고결론은 면접형 감사훈련을 위해 만든 가상 설정입니다.",
+    note: "A사와 모든 수치·상황·보고결론은 면접형 감사훈련을 위해 만든 가상 설정입니다.",
     sources: [{ label: "IFRS 15 Revenue", detail: "수익인식 교육 근거 · IFRS Foundation", url: "https://www.ifrs.org/issued-standards/list-of-standards/ifrs-15-revenue-from-contracts-with-customers/" }],
   },
   {
-    id: "cloud-note-sim", number: "07", company: "클라우드노트", code: "SIM-SAS-02", year: "2025", field: "B2B SaaS · 구축 · 유지보수", category: "SOFTWARE", basis: "완전한 가상 연결 재무제표", fictional: true,
+    id: "fictional-b", number: "07", company: "기업용 SaaS B사", code: "FICTIONAL-B", year: "2025", field: "B2B SaaS · 구축 · 유지보수", category: "SOFTWARE", basis: "완전한 가상 연결 재무제표", fictional: true,
     summary: "하나의 계약에 묶인 소프트웨어·구축·유지보수의 매출 시점을 판단하세요.", risk: "MULTI-ELEMENT RISK", accent: "#a995ff",
     metrics: [["연간반복매출", "1,260억"], ["계약부채", "420억"], ["계약자산", "190억"], ["기업고객", "780곳"]],
     terms: [
@@ -158,7 +158,7 @@ const fictionalCases: AuditCase[] = [
     sources: [{ label: "IFRS 15 Revenue", detail: "수행의무·계약변경 교육 근거 · IFRS Foundation", url: "https://www.ifrs.org/issued-standards/list-of-standards/ifrs-15-revenue-from-contracts-with-customers/" }],
   },
   {
-    id: "neural-forge-sim", number: "08", company: "뉴럴포지", code: "SIM-AIX-03", year: "2025", field: "생성형 AI · GPU 인프라", category: "AI", basis: "완전한 가상 연결 재무제표", fictional: true,
+    id: "fictional-c", number: "08", company: "생성형 AI C사", code: "FICTIONAL-C", year: "2025", field: "생성형 AI · GPU 인프라", category: "AI", basis: "완전한 가상 연결 재무제표", fictional: true,
     summary: "개발비 자산화와 GPU 장기계약, 자동분개의 통제와 계속기업을 연결하세요.", risk: "CAPITALISATION RISK", accent: "#77d6ff",
     metrics: [["개발지출", "460억"], ["자산화액", "350억"], ["GPU 약정", "620억"], ["실제 성장률", "계획의 40%"]],
     terms: [
@@ -178,7 +178,7 @@ const fictionalCases: AuditCase[] = [
     sources: [{ label: "IAS 38 Intangible Assets", detail: "개발비 교육 근거 · IFRS Foundation", url: "https://www.ifrs.org/issued-standards/list-of-standards/ias-38-intangible-assets/" }, { label: "IAS 36 Impairment", detail: "손상 교육 근거 · IFRS Foundation", url: "https://www.ifrs.org/issued-standards/list-of-standards/ias-36-impairment-of-assets/" }],
   },
   {
-    id: "ad-pulse-sim", number: "09", company: "애드펄스", code: "SIM-ADV-04", year: "2025", field: "디지털 광고 · 추천 알고리즘", category: "ADTECH", basis: "완전한 가상 연결 재무제표", fictional: true,
+    id: "fictional-d", number: "09", company: "디지털 광고 D사", code: "FICTIONAL-D", year: "2025", field: "디지털 광고 · 추천 알고리즘", category: "ADTECH", basis: "완전한 가상 연결 재무제표", fictional: true,
     summary: "클릭 데이터가 매출을 만드는 기업에서 데이터 흐름과 AI 이상탐지의 한계를 감사하세요.", risk: "SYSTEM GENERATED REVENUE", accent: "#ffe04f",
     metrics: [["광고매출", "2,940억"], ["매출 비중", "91%"], ["연간 클릭", "8.2억건"], ["봇 조정률", "4.1%"]],
     terms: [
@@ -198,7 +198,7 @@ const fictionalCases: AuditCase[] = [
     sources: [{ label: "Automated Tools and Techniques", detail: "데이터 분석 교육 근거 · IAASB", url: "https://www.iaasb.org/publications/non-authoritative-support-material-using-automated-tools-and-techniques-when-identifying-risks" }],
   },
   {
-    id: "orbit-bridge-sim", number: "10", company: "오비트브릿지", code: "SIM-GLB-05", year: "2025", field: "크로스보더 플랫폼 · 핀테크", category: "GLOBAL", basis: "완전한 가상 연결 재무제표", fictional: true,
+    id: "fictional-e", number: "10", company: "해외 플랫폼 E사", code: "FICTIONAL-E", year: "2025", field: "크로스보더 플랫폼 · 핀테크", category: "GLOBAL", basis: "완전한 가상 연결 재무제표", fictional: true,
     summary: "급증한 해외매출·채권과 AI 대손모형, 사이버 사고의 재무제표 영향을 추적하세요.", risk: "ECL & CYBER RISK", accent: "#85e0b5",
     metrics: [["해외매출", "1,840억"], ["해외 매출채권", "690억"], ["180일 초과", "124억"], ["AI 산출 ECL", "38억"]],
     terms: [

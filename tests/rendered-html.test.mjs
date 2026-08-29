@@ -23,8 +23,8 @@ test("server-renders the Audit Room case desk", async () => {
   assert.match(html, /<title>Audit Room — 공시로 배우는 감사 게임<\/title>/i);
   assert.match(html, /실제 기업 공시 사건/);
   assert.match(html, /완전한 가상 감사사건/);
-  assert.match(html, /루프마켓/);
-  assert.match(html, /오비트브릿지/);
+  assert.match(html, /커머스 플랫폼 A사/);
+  assert.match(html, /해외 플랫폼 E사/);
   assert.doesNotMatch(html, /codex-preview|Building your site|react-loading-skeleton/i);
 });
 
