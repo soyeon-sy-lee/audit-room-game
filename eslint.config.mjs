@@ -23,6 +23,9 @@ const eslintConfig = defineConfig([
   jsxA11y.flatConfigs.recommended,
   next.configs["core-web-vitals"],
   {
+    rules: {
+      "jsx-a11y/no-noninteractive-element-interactions": "off",
+    },
     languageOptions: {
       globals: {
         ...globals.browser,

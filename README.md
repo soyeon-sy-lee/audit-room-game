@@ -1,100 +1,53 @@
-# vinext-starter
+# Audit Room
 
-A clean full-stack starter running on
-[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support.
+DART에 공개된 사업보고서와 감사보고서를 바탕으로 감사인의 전문가적 판단을 연습하는 교육용 웹게임입니다.
 
-## Prerequisites
+실제 기업 공시 사건과 완전한 가상 감사사건을 명확히 구분하며, 이용자는 객관식 선택지를 통해 위험평가, 감사증거 선택, 회계추정 검증, 전문가 활용 및 감사의견 형성을 연습합니다.
 
-- Node.js `>=22.13.0`
+## 주요 기능
 
-## Quick Start
+- 2023년 이후 TMT 기업의 공개 공시를 바탕으로 한 실제 기업 사건 5개
+- 기업명, 수치, 상황과 결론을 모두 창작한 가상 감사사건 5개
+- 문항별 해설과 감사보고서·사업보고서 출처
+- 브라우저에만 저장되는 XP, 사건 완료 기록과 직급 진행
+- 모바일과 데스크톱을 지원하는 반응형 화면
+
+## 이용 전 안내
+
+- 금융감독원, 삼일회계법인, 사례 기업 또는 관련 임직원이 제작·승인·후원한 서비스가 아닙니다.
+- 기업명과 감사인명은 공개 공시의 사실관계를 설명하기 위해서만 사용합니다.
+- 실제 기업 사건의 사실관계와 정답은 공개 공시를 요약하며, 오답 선택지는 교육 목적으로 구성했습니다.
+- 가상 사건은 특정 실제 기업이나 사건을 지칭하지 않습니다.
+- 감사·회계·법률·투자 자문이 아니며 실제 업무나 투자판단을 대체하지 않습니다.
+- 공시 원문과 기업명·상표의 권리는 각 권리자에게 있습니다.
+
+## 로컬 실행
+
+Node.js 22 이상이 필요합니다.
 
 ```bash
-npm install
-npm run dev
-npm run build
+pnpm install
+pnpm run dev
 ```
 
-This starter does not use `wrangler.jsonc`.
+정적 배포 파일은 다음 명령으로 `out` 폴더에 생성됩니다.
 
-## Included Shape
-
-- edit site code under `app/`
-- `.openai/hosting.json` declares optional Sites D1 and R2 bindings
-- `vite.config.ts` simulates declared bindings for local development
-- `db/schema.ts` starts intentionally empty
-- `examples/d1/` contains an optional D1 example surface
-- `drizzle.config.ts` supports local migration generation when needed
-
-## Workspace Auth Headers
-
-Signed-in visitors receive both `oai-authenticated-user-id` and `oai-authenticated-user-email`. Private Sites require every visitor to sign in; public Sites may also have anonymous visitors, for whom neither header is present.
-
-The user ID is stable for the same user on the same Site and different across Sites. Email and name are intended for display or contact purposes.
-
-SIWC-authenticated workspace sites may also receive
-`oai-authenticated-user-full-name` when the user's SIWC profile has a non-empty
-`name` claim. The full-name value is percent-encoded UTF-8 and is accompanied by
-`oai-authenticated-user-full-name-encoding: percent-encoded-utf-8`.
-
-Treat the full name as optional and fall back to email when it is absent:
-
-```tsx
-import { headers } from "next/headers";
-
-export default async function Home() {
-  const requestHeaders = await headers();
-  const userId = requestHeaders.get("oai-authenticated-user-id");
-  const email = requestHeaders.get("oai-authenticated-user-email");
-  const encodedFullName = requestHeaders.get("oai-authenticated-user-full-name");
-  const fullName =
-    encodedFullName &&
-    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
-      "percent-encoded-utf-8"
-      ? decodeURIComponent(encodedFullName)
-      : null;
-
-  const displayName = fullName ?? email;
-  // ...
-}
+```bash
+pnpm run build
 ```
 
-## Optional Dispatch-Owned ChatGPT Sign-In
+## GitHub Pages
 
-Import the ready-to-use helpers from `app/chatgpt-auth.ts` when the site needs
-optional or required ChatGPT sign-in:
+`main` 브랜치에 변경사항이 올라가면 `.github/workflows/pages.yml`이 정적 사이트를 자동으로 빌드하고 배포합니다.
 
-- Use `getChatGPTUser()` for optional signed-in UI.
-- Use `requireChatGPTUser(returnTo)` for server-rendered pages that should send
-  anonymous visitors through Sign in with ChatGPT.
-- Use `chatGPTSignInPath(returnTo)` and `chatGPTSignOutPath(returnTo)` for
-  browser links or actions.
-- Pass a same-origin relative `returnTo` path for the destination after sign-in
-  or sign-out. The helper validates and safely encodes it.
-- Mark protected pages with `export const dynamic = "force-dynamic"` because
-  they depend on per-request identity headers.
+처음 한 번은 저장소의 **Settings → Pages → Build and deployment → Source**에서 **GitHub Actions**를 선택해야 합니다.
 
-Dispatch owns `/signin-with-chatgpt`, `/signout-with-chatgpt`, `/callback`, the
-OAuth cookies, and identity header injection. Do not implement app routes for
-those reserved paths. Routes that do not import and call the helper remain
-anonymous-compatible.
+기본 주소는 다음 형식입니다.
 
-SIWC establishes identity only; it does not prove workspace membership. Use the
-Sites hosting platform's access policy controls for workspace-wide restrictions,
-or enforce explicit server-side membership or allowlist checks.
+```text
+https://<github-username>.github.io/audit-room-game/
+```
 
-Use SIWC for account pages, user-specific dashboards, saved records, and write
-actions tied to the current ChatGPT user. Leave public content anonymous.
+## 라이선스
 
-## Useful Commands
-
-- `npm run dev`: start local development
-- `npm run build`: verify the vinext build output
-- `npm test`: build the starter and verify its rendered loading skeleton
-- `npm run db:generate`: generate Drizzle migrations after schema changes
-
-## Learn More
-
-- [vinext Documentation](https://github.com/cloudflare/vinext)
-- [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)
+소스 코드는 [MIT License](LICENSE)로 공개합니다. 연결된 공시 원문, 기업명, 상표 및 제3자 자료에 대한 권리는 각 권리자에게 있으며 MIT License의 적용 대상이 아닙니다.

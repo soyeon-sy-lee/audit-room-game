@@ -260,11 +260,15 @@ export default function Home() {
   const [earnedXp, setEarnedXp] = useState(0);
 
   useEffect(() => {
-    const savedXp = window.localStorage.getItem("audit-room-xp");
-    const savedCases = window.localStorage.getItem("audit-room-completed");
-    if (savedXp) setXp(Number(savedXp));
-    if (savedCases) setCompletedIds(JSON.parse(savedCases));
-    if (!window.localStorage.getItem("audit-room-notice-seen")) setNoticeOpen(true);
+    const timer = window.setTimeout(() => {
+      const savedXp = window.localStorage.getItem("audit-room-xp");
+      const savedCases = window.localStorage.getItem("audit-room-completed");
+      if (savedXp) setXp(Number(savedXp));
+      if (savedCases) setCompletedIds(JSON.parse(savedCases));
+      if (!window.localStorage.getItem("audit-room-notice-seen")) setNoticeOpen(true);
+    }, 0);
+
+    return () => window.clearTimeout(timer);
   }, []);
 
   const activeCase = cases.find((item) => item.id === caseId) ?? cases[0];
@@ -333,7 +337,7 @@ export default function Home() {
             <section className="workspace" aria-live="polite">
               <aside className="case-file"><p className="section-label">CLIENT BRIEF</p><div className="client-title"><span>{activeCase.code}</span><h2>{activeCase.company}</h2></div><p>{activeCase.field}<br />{activeCase.basis}</p><dl>{activeCase.metrics.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl><div className="risk-chip">{activeCase.risk} <b>HIGH</b></div><p className="data-note">{activeCase.fictional ? "모든 수치·상황은 교육용 가상 설정" : `단위 반올림 · ${activeCase.year} 기준`}</p></aside>
               <article className="question-card">
-                <details className="term-brief" defaultOpen key={activeCase.id}>
+                <details className="term-brief" open key={activeCase.id}>
                   <summary><span>먼저 읽는 산업·감사용어</span><b>{activeCase.terms.length}개 용어 <i>＋</i></b></summary>
                   <div className="term-grid">{activeCase.terms.map((item) => <div key={item.term}><strong>{item.term}</strong><p>{item.meaning}</p><small><b>왜 중요할까?</b> {item.why}</small></div>)}</div>
                 </details>
