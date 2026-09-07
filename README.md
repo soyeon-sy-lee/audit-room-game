@@ -24,34 +24,3 @@ DART에 공개된 사업보고서와 감사보고서를 바탕으로 감사인�
 ## Demo
 
 https://soyeon-sy-lee.github.io/audit-room-game
-
-## 로컬 실행
-
-Node.js 22 이상이 필요합니다.
-
-```bash
-pnpm install
-pnpm run dev
-```
-
-정적 배포 파일은 다음 명령으로 `out` 폴더에 생성됩니다.
-
-```bash
-pnpm run build
-```
-
-## GitHub Pages
-
-`main` 브랜치에 변경사항이 올라가면 `.github/workflows/pages.yml`이 정적 사이트를 자동으로 빌드하고 배포합니다.
-
-처음 한 번은 저장소의 **Settings → Pages → Build and deployment → Source**에서 **GitHub Actions**를 선택해야 합니다.
-
-기본 주소는 다음 형식입니다.
-
-```text
-https://<github-username>.github.io/audit-room-game/
-```
-
-## 라이선스
-
-소스 코드는 [MIT License](LICENSE)로 공개합니다. 연결된 공시 원문, 기업명, 상표 및 제3자 자료에 대한 권리는 각 권리자에게 있으며 MIT License의 적용 대상이 아닙니다.
